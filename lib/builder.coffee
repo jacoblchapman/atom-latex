@@ -8,6 +8,8 @@ class Builder
       when 'win32' then 'Path'
       else 'PATH'
 
+  executable: undefined
+
   run: (args, callback) -> undefined
   constructArgs: (filePath) -> undefined
   parseLogFile: (texFilePath) -> undefined

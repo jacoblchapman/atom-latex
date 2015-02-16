@@ -6,8 +6,10 @@ LogParser = require '../parsers/log-parser'
 
 module.exports =
 class LatexmkBuilder extends Builder
+  executable: 'latexmk'
+
   run: (args, callback) ->
-    command = "latexmk #{args.join(' ')}"
+    command = "#{@executable} #{args.join(' ')}"
     options = @constructChildProcessOptions()
     options.env['max_print_line'] = 1000  # Max log file line length.
 

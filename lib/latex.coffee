@@ -15,6 +15,7 @@ module.exports =
     atom.commands.add 'atom-workspace', 'latex:build', => @build()
     atom.commands.add 'atom-workspace', 'latex:sync', => @sync()
     atom.commands.add 'atom-workspace', 'latex:clean', => @clean()
+    atom.commands.add 'atom-workspace', 'latex:run-diagnostics', => @runDiagnostics()
 
     atom.packages.once 'activated', =>
       @statusBar = document.querySelector('status-bar')
@@ -87,6 +88,10 @@ module.exports =
         console.info 'LaTeX clean removed: ' + fileToRemove
       else
         console.info 'LaTeX clean did not find: ' + fileToRemove
+
+  runDiagnostics: () ->
+    @diagnostics ?= require './diagnostics'
+    @diagnostics.checkTexPath(@getBuilder())
 
   getBuilder: ->
     new LatexmkBuilder()
