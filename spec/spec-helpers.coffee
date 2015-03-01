@@ -29,5 +29,5 @@ module.exports =
     env.defaultTimeoutInterval = interval
     originalInterval
 
-  silenceLogging: (klass) ->
-    klass.log = new NullLogger() if klass?.hasOwnProperty('log')
+  nullLogger: ->
+    new NullLogger()

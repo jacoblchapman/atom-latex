@@ -11,8 +11,8 @@ ProgressIndicatorView = require './progress-indicator-view'
 
 module.exports =
 class Composer
-  constructor: ->
-    @log = new ConsoleLogger()
+  constructor: (logger)->
+    @log = logger ? new ConsoleLogger()
 
   build: ->
     editor = atom.workspace.getActivePaneItem()
