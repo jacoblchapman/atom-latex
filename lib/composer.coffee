@@ -4,18 +4,18 @@ path = require 'path'
 
 module.exports =
 class Composer
-  constructor: (logger) ->
-    @log = logger ? @getDefaultLogger()
+  constructor: () ->
+    # @log = logger ? @getDefaultLogger()
 
   build: ->
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
     unless filePath?
-      @log.warning('File needs to be saved to disk before it can be TeXified.')
+      atom.latex.log.warning('File needs to be saved to disk before it can be TeXified.')
       return false
 
     unless @isTexFile(filePath)
-      @log.warning("File does not seem to be a TeX file;
+      atom.latex.log.warning("File does not seem to be a TeX file;
         unsupported extension '#{path.extname(filePath)}'.")
       return false
 
@@ -44,7 +44,7 @@ class Composer
     {filePath, lineNumber} = @getEditorDetails()
 
     unless outputFilePath = @resolveOutputFilePath(filePath)
-      @log.warning('Could not resolve path to output file associated with the current file.')
+      atom.latex.log.warning('Could not resolve path to output file associated with the current file.')
       return
 
     if opener = @getOpener()
@@ -55,7 +55,7 @@ class Composer
   clean: ->
     editor = atom.workspace.getActivePaneItem()
     unless filePath = editor?.getPath()
-      @log.warning('File needs to be saved to disk before clean can find the project files.')
+      atom.latex.log.warning('File needs to be saved to disk before clean can find the project files.')
       return
 
     rootFilePath = @resolveRootFilePath(filePath)
@@ -72,9 +72,9 @@ class Composer
       fileToRemove = path.join(rootFilePath, rootFile + extension)
       if fs.existsSync(fileToRemove)
         fs.removeSync(fileToRemove)
-        console.info 'LaTeX clean removed: ' + fileToRemove
+        atom.latex.log.info("LaTeX clean removed: #{fileToRemove}")
       else
-        console.info 'LaTeX clean did not find: ' + fileToRemove
+        atom.latex.log.info("LaTeX clean did not find: #{fileToRemove}")
 
   setStatusBar: (statusBar) ->
     @statusBar = statusBar
@@ -98,14 +98,15 @@ class Composer
       if atom.packages.resolvePackagePath('pdf-view')?
         OpenerImpl = require './openers/atompdf-opener'
       else
-        @log.warning('No PDF opener found. For cross-platform viewing,
+        atom.latex.log.warning('No PDF opener found. For cross-platform viewing,
           install the pdf-view package.')
         return
     new OpenerImpl()
 
-  getDefaultLogger: ->
-    ConsoleLogger = require './loggers/console-logger'
-    new ConsoleLogger()
+  # getDefaultLogger: ->
+  #   ConsoleLogger = require './loggers/console-logger'
+  #   new ConsoleLogger()
+  #   require('./logger').getLogger()
 
   moveResult: (result, filePath) ->
     originalFilePath = result.outputFilePath
@@ -129,7 +130,7 @@ class Composer
       builder = @getBuilder()
       result = builder.parseLogFile(rootFilePath)
       unless outputFilePath = result?.outputFilePath
-        @log.warning('Log file parsing failed!')
+        atom.latex.log.warning('Log file parsing failed!')
         return
       @outputLookup ?= {}
       @outputLookup[filePath] = outputFilePath
@@ -144,7 +145,7 @@ class Composer
 
   showError: (statusCode, result, builder) ->
     @showErrorIndicator()
-    @log.error(statusCode, result, builder)
+    atom.latex.log.error(statusCode, result, builder)
 
   showProgressIndicator: ->
     return @indicator if @indicator?

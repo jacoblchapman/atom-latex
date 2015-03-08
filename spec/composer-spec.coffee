@@ -7,9 +7,11 @@ LatexmkBuilder = require '../lib/builders/latexmk'
 describe "Composer", ->
   [composer, fixturesPath] = []
 
+  helpers.setNullLogger()
+
   beforeEach ->
     fixturesPath = helpers.cloneFixtures()
-    composer = new Composer(helpers.nullLogger())
+    composer = new Composer()
 
   describe "build", ->
     [originalTimeoutInterval] = []

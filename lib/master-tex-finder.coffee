@@ -50,7 +50,6 @@ class MasterTexFinder
     result = files.filter (path) => @isMasterFile(path)
     return result[0] if result.length is 1
 
-    console.warn 'Cannot find latex master file' unless atom.inSpecMode()
     @filePath
 
   # Returns the a latex master file.

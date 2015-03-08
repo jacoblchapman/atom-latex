@@ -31,3 +31,7 @@ module.exports =
 
   nullLogger: ->
     new NullLogger()
+
+  setNullLogger: ->
+    logger = new NullLogger()
+    atom.latex = log: logger

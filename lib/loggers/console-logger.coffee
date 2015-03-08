@@ -32,3 +32,8 @@ class ConsoleLogger extends Logger
     console.group('LaTeX warnings')
     console.log(message)
     console.groupEnd()
+
+  info: (message) ->
+    console.group('LaTeX info')
+    console.log(message)
+    console.groupEnd()

@@ -5,6 +5,7 @@ module.exports =
   config: ConfigSchema
 
   activate: ->
+    @prepareGlobalObject()
     @composer = new Composer()
 
     atom.commands.add 'atom-workspace', 'latex:build', => @composer.build()
@@ -13,3 +14,7 @@ module.exports =
 
   consumeStatusBar: (statusBar) ->
     @composer.setStatusBar(statusBar)
+
+  prepareGlobalObject: ->
+    window.atom = {} unless atom?
+    atom.latex = {} unless atom.latex?
