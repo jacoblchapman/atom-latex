@@ -4,18 +4,15 @@ path = require 'path'
 
 module.exports =
 class Composer
-  constructor: (logger) ->
-    @log = logger ? @getDefaultLogger()
-
   build: ->
     editor = atom.workspace.getActivePaneItem()
     filePath = editor?.getPath()
     unless filePath?
-      @log.warning('File needs to be saved to disk before it can be TeXified.')
+      latex.log.warning('File needs to be saved to disk before it can be TeXified.')
       return false
 
     unless @isTexFile(filePath)
-      @log.warning("File does not seem to be a TeX file;
+      latex.log.warning("File does not seem to be a TeX file;
         unsupported extension '#{path.extname(filePath)}'.")
       return false
 
@@ -44,7 +41,7 @@ class Composer
     {filePath, lineNumber} = @getEditorDetails()
 
     unless outputFilePath = @resolveOutputFilePath(filePath)
-      @log.warning('Could not resolve path to output file associated with the current file.')
+      latex.log.warning('Could not resolve path to output file associated with the current file.')
       return
 
     if opener = latex.getOpener()
@@ -55,7 +52,7 @@ class Composer
   clean: ->
     editor = atom.workspace.getActivePaneItem()
     unless filePath = editor?.getPath()
-      @log.warning('File needs to be saved to disk before clean can find the project files.')
+      latex.log.warning('File needs to be saved to disk before clean can find the project files.')
       return
 
     rootFilePath = @resolveRootFilePath(filePath)
@@ -79,10 +76,6 @@ class Composer
   setStatusBar: (statusBar) ->
     @statusBar = statusBar
 
-  getDefaultLogger: ->
-    ConsoleLogger = require './loggers/console-logger'
-    new ConsoleLogger()
-
   moveResult: (result, filePath) ->
     originalFilePath = result.outputFilePath
     result.outputFilePath = @alterParentPath(filePath, result.outputFilePath)
@@ -105,7 +98,7 @@ class Composer
       builder = latex.getBuilder()
       result = builder.parseLogFile(rootFilePath)
       unless outputFilePath = result?.outputFilePath
-        @log.warning('Log file parsing failed!')
+        latex.log.warning('Log file parsing failed!')
         return
       @outputLookup ?= {}
       @outputLookup[filePath] = outputFilePath
@@ -120,7 +113,7 @@ class Composer
 
   showError: (statusCode, result, builder) ->
     @showErrorIndicator()
-    @log.error(statusCode, result, builder)
+    latex.log.error(statusCode, result, builder)
 
   showProgressIndicator: ->
     return @indicator if @indicator?

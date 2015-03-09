@@ -41,7 +41,7 @@ describe "Latex", ->
       expect(origin).toBeUndefined()
       expect(latex.opener.constructor.name).toEqual(opener.constructor.name)
 
-  describe "Logger proxy (@log)", ->
+  describe "Logger proxy", ->
     [logger] = []
 
     beforeEach ->

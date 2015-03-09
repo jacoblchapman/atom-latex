@@ -9,7 +9,7 @@ describe "Composer", ->
 
   beforeEach ->
     fixturesPath = helpers.cloneFixtures()
-    composer = new Composer(helpers.nullLogger())
+    composer = new Composer()
 
   describe "build", ->
     [originalTimeoutInterval] = []
