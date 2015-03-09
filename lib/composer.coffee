@@ -47,7 +47,7 @@ class Composer
       @log.warning('Could not resolve path to output file associated with the current file.')
       return
 
-    if opener = @getOpener()
+    if opener = latex.getOpener()
       opener.open(outputFilePath, filePath, lineNumber)
 
   # TODO: Improve overall code quality within this function.
@@ -78,26 +78,6 @@ class Composer
 
   setStatusBar: (statusBar) ->
     @statusBar = statusBar
-
-  getOpener: ->
-    # TODO: Move this to a resolver module? Will get more complex...
-    OpenerImpl = switch process.platform
-      when 'darwin'
-        if fs.existsSync(atom.config.get('latex.skimPath'))
-          require './openers/skim-opener'
-        else
-          require './openers/preview-opener'
-      when 'win32'
-        if fs.existsSync(atom.config.get('latex.sumatraPath'))
-          require './openers/sumatra-opener'
-    unless OpenerImpl?
-      if atom.packages.resolvePackagePath('pdf-view')?
-        OpenerImpl = require './openers/atompdf-opener'
-      else
-        @log.warning('No PDF opener found. For cross-platform viewing,
-          install the pdf-view package.')
-        return
-    new OpenerImpl()
 
   getDefaultLogger: ->
     ConsoleLogger = require './loggers/console-logger'
@@ -134,7 +114,7 @@ class Composer
     outputFilePath
 
   showResult: (result) ->
-    if @shouldOpenResult() and opener = @getOpener()
+    if @shouldOpenResult() and opener = latex.getOpener()
       {filePath, lineNumber} = @getEditorDetails()
       opener.open(result.outputFilePath, filePath, lineNumber)
 
