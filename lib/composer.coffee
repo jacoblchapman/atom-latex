@@ -21,7 +21,7 @@ class Composer
 
     editor.save() if editor.isModified() # TODO: Make this configurable?
 
-    builder = @getBuilder()
+    builder = latex.getBuilder()
     rootFilePath = @resolveRootFilePath(filePath)
     args = builder.constructArgs(rootFilePath)
 
@@ -79,10 +79,6 @@ class Composer
   setStatusBar: (statusBar) ->
     @statusBar = statusBar
 
-  getBuilder: ->
-    LatexmkBuilder = require './builders/latexmk'
-    new LatexmkBuilder()
-
   getOpener: ->
     # TODO: Move this to a resolver module? Will get more complex...
     OpenerImpl = switch process.platform
@@ -126,7 +122,7 @@ class Composer
     rootFilePath = @resolveRootFilePath(filePath)
 
     unless outputFilePath = @outputLookup?[filePath]
-      builder = @getBuilder()
+      builder = latex.getBuilder()
       result = builder.parseLogFile(rootFilePath)
       unless outputFilePath = result?.outputFilePath
         @log.warning('Log file parsing failed!')

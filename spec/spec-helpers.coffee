@@ -1,3 +1,4 @@
+require './spec-bootstrap'
 _ = require 'underscore-plus'
 fs = require 'fs-plus'
 temp = require 'temp'

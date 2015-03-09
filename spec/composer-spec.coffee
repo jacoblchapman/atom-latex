@@ -129,7 +129,7 @@ describe "Composer", ->
             errors: []
             warnings: []
 
-      spyOn(composer, 'getBuilder').andReturn(new MockBuilder())
+      spyOn(latex, 'getBuilder').andReturn(new MockBuilder())
       spyOn(composer, 'showError').andCallThrough()
 
       waitsForPromise ->
