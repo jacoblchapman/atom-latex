@@ -17,8 +17,12 @@ class Latex
     @builder = new LatexmkBuilder()
 
   setDefaultLogger: ->
-    ConsoleLogger = require './loggers/console-logger'
-    @logger = new ConsoleLogger()
+    atom.config.observe 'latex.useNotificationsLogger', (useNotificationsLogger) =>
+      if useNotificationsLogger
+        LoggerImpl = require './loggers/notifications-logger'
+      else
+        LoggerImpl = require './loggers/console-logger'
+      @logger = new LoggerImpl()
 
   setDefaultOpener: ->
     if OpenerImpl = @resolveOpenerImplementation(process.platform)

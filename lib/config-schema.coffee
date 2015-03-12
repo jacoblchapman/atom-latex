@@ -69,3 +69,9 @@ module.exports =
     description: "The full path to your TeX distribution's bin directory."
     type: 'string'
     default: ''
+
+  useNotificationsLogger:
+    title: 'Use Notifications Logger (Experimental)'
+    description: "Log errors, warnings, etc. using Atom's notification system."
+    type: 'boolean'
+    default: false
