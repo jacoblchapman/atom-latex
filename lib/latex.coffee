@@ -1,10 +1,13 @@
 module.exports =
 class Latex
   initialize: ->
+    return if @initialized
+
     @setDefaultLogger()
     @createLogProxy()
     @setDefaultBuilder()
     @setDefaultOpener()
+    @initialized = true
 
   getBuilder: -> @builder
   getLogger: -> @logger
